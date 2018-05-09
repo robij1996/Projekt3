@@ -15,15 +15,14 @@ static unsigned int SZEROKOSC = 600;
 class Plansza
  {
     
-    int wielkoscPola = 0;
-    int danaDoPola = 0;
-    int iloscBic = 0;
-    int danaDoBic = 0;
-    int wcisniecieMyszki = 0;
+    int wielkoscPola = 0; //zmienna ktora przyjmuje wartosc wielkosci pola 
+    int danaDoPola = 0;   // zmienna pomocnica w obliczeniu wielkosci pola 
+    int iloscBic = 0;     // zmienna ktora przyjmuje ilosc figur w rzedzie do zbicia
+    int danaDoBic = 0;    // pomocnicza to wyznaczenia ilosci bic 
+    int wcisniecieMyszki = 0;   //pomocnica zwiazana z myszka
     Font font;
     
     public:
-    int wymiar;
     void konstruktorFont();
     void opoznienie(Clock);
     void wylaczanieGry(RenderWindow&);
@@ -31,6 +30,8 @@ class Plansza
     void daneWielkosc(RenderWindow&);
     void wygladPolaStartowego(RenderWindow &);
     void daneBic(RenderWindow &);
+    void przejscieDoGry(RenderWindow &, int &);
+
 
     
  };
