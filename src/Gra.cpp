@@ -18,6 +18,30 @@ Gra::Gra()
 
 }
 
+int Gra::getWygranaCzlowieka()
+{
+    return wygranaCzlowieka;
+}
+
+int Gra::getWygranaKomputera()
+{
+    return wygranaKomputera;
+}
+
+
+void Gra::zerowanieWszystkiego()
+{
+    for(int i = 0; i < 15; i++)
+        for(int k = 0; k < 15; k++)
+            tab[i][k] = 0;
+    ruchUzytkownika = 1;
+    ruchKomputera = 0 ;
+    iloscRuchow = 0;
+    wygranaCzlowieka = 0;
+    wygranaKomputera = 0;
+
+}
+
 void Gra::opoznienie(Clock zegar)
 {
   const float timeStep = 1 / 60.f;
@@ -89,18 +113,14 @@ void Gra::wstawianieZnakowPrzezCzlowieka(RenderWindow &oknoAplikacji)
 
         if( Mouse::isButtonPressed( Mouse::Left ) )
             {
+                if(tab[i][k] == 0)
+                {
                 tab[i][k] = -1;
                 ruchUzytkownika = 0;
                 ruchKomputera = 1;
                 iloscRuchow++;
+                }
                 
-                
-                /*
-                Text tekst1( "X", font, DLUGOSC/wielkoscPola );
-                cout<<i<<" "<<k<<endl;
-                tekst1.setPosition( i*(DLUGOSC/wielkoscPola), k*(SZEROKOSC/wielkoscPola) );
-                tekst1.setColor( sf::Color::Black );
-                oknoAplikacji.draw(tekst1);*/
             }
 
     for(int i = 0; i < wielkoscPola; i++)
@@ -108,7 +128,6 @@ void Gra::wstawianieZnakowPrzezCzlowieka(RenderWindow &oknoAplikacji)
             if(tab[i][k] == -1)
             {
                 Text tekst1( "X", font, DLUGOSC/wielkoscPola );
-                //cout<<i<<" "<<k<<endl;
                 tekst1.setPosition( i*(DLUGOSC/wielkoscPola), k*(SZEROKOSC/wielkoscPola) );
                 tekst1.setColor( sf::Color::Black );
                 oknoAplikacji.draw(tekst1);
@@ -116,39 +135,125 @@ void Gra::wstawianieZnakowPrzezCzlowieka(RenderWindow &oknoAplikacji)
             
 
             }
-/*
- for (int a = 0; a < wielkoscPola; ++a)
-    {
-        for (int b = 0; b < wielkoscPola; ++b)
-            cout << tab[b][a] << " ";
-        cout << "\n";
-    }*/
-        
 
 
 }
+
+
+
+void Gra::znajdzNajlepszyRuch(int tab[15][15], int &x,int &y)
+{
+	int naj = -1000;
+	int alpha = -1000;
+	int beta = 1000;
+    
+
+    for(int i = 0; i < wielkoscPola; i++)
+        for(int k = 0; k < wielkoscPola; k++)
+            if(tab[i][k] == 0)
+            {
+                tab[i][k] = 1;
+                int ruch =miniMax(tab, 0, false, alpha, beta);
+                tab[i][k] = 0;
+                if(ruch > naj)
+                {
+                    x = i;
+                    y = k;
+                    naj = ruch;
+                    
+                }
+
+            }
+
+}
+
+int Gra::miniMax(int tab[15][15], int glebokosc, bool gracz, int alpha, int beta)
+{
+    int wynik = sprawdzenieWygranej();
+
+    if(wynik == 10){
+		return wynik - glebokosc;
+	}
+	if(wynik == -10){
+		return wynik + glebokosc;
+	}
+	if(remis()){
+		return 0;
+	}
+
+    	if(gracz){
+		int najlepsze = -1000;
+		for(int i = 0; i < wielkoscPola;i++){
+			for(int j = 0;j < wielkoscPola;j++){
+				if(tab[i][j] == 0){
+					tab[i][j] = 1;
+					int val = miniMax(tab,glebokosc + 1 ,false,alpha,beta);
+					najlepsze = maxx(najlepsze,val);
+					alpha = maxx(najlepsze,alpha);
+					tab[i][j] = 0;
+					if(beta <= alpha)
+						break;
+				}
+				if(beta <= alpha)
+					break;
+			}
+		}
+		return najlepsze;
+	}else{
+		int najlepsze = 1000;
+		for(int i = 0; i < wielkoscPola;i++){
+			for(int j = 0;j < wielkoscPola;j++){
+				if(tab[i][j] == 0){
+					tab[i][j] = -1;
+					int val = miniMax(tab,glebokosc + 1 ,true,alpha,beta);
+					najlepsze = minx(najlepsze,val);
+					beta = minx(najlepsze,beta);
+					tab[i][j] = 0;
+					if(beta <= alpha)
+						break;
+				}
+				if(beta <= alpha)
+					break;
+			}
+		}
+		return najlepsze;
+	}
+
+
+
+
+
+
+
+}
+
 
 void Gra::wstawianieZnakowPrzezKomputer(RenderWindow &oknoAplikacji)
 {
     Font font;
     font.loadFromFile( "arial.ttf" );
-    srand( time( NULL ) );
+    int x,y;
+
 
     if(ruchKomputera == 1)
     {
-        int i = (rand() % wielkoscPola);
-        int k = (rand() % wielkoscPola );
-        //cout<<i<<"  "<<k<<endl;
+        
 
-        if(tab[i][k] == 0)
-        {
-            tab[i][k] = 1;
+        znajdzNajlepszyRuch(tab,x,y);
+
+
+
+
+
+        //zajmujacy sie wstawianiem ruchu 
+        
+            tab[x][y] = 1;
             ruchUzytkownika = 1;
             ruchKomputera = 0;
             iloscRuchow++;
             
             
-        }
+        
 
 
     }
@@ -167,21 +272,12 @@ void Gra::wstawianieZnakowPrzezKomputer(RenderWindow &oknoAplikacji)
    
     
 
-    
+  
             
 
 
 }
 
-bool Gra::zabezpiecznie (int i, int k)
-{
-    if( ( (i + iloscBic) <= wielkoscPola) && ( (k + iloscBic) <= wielkoscPola) )
-        return true;
-    else
-        return false;
-
-
-}
 
 
 //funkcja sprawdzajaca czy jest remis 
@@ -324,6 +420,28 @@ return 0;
 }
 
 
+int Gra::maxx(int a,int b)
+{
+	if(a > b){
+		return a;
+	}
+	return b;
+}
+
+
+
+int Gra::minx(int a,int b)
+{
+	if(a < b){
+		return a;
+	}
+	return b;
+}
+
+
+
+
+
 void Gra::plansza(RenderWindow &oknoAplikacji, int pole, int bicie)
 {
     przypisanieWielkosci(pole, bicie);
@@ -333,37 +451,38 @@ void Gra::plansza(RenderWindow &oknoAplikacji, int pole, int bicie)
     tworzenieLini(oknoAplikacji);
 
     wstawianieZnakowPrzezCzlowieka(oknoAplikacji);
+    
 
     wstawianieZnakowPrzezKomputer(oknoAplikacji);
 
-    if(sprawdzenieWygranej() == -10)
-                {
-                    cout<<"wygrana czlowieka"<<endl;
-                }
-    if(sprawdzenieWygranej() == 10)
-        {
-            cout<<"wygrana komputera"<<endl;
-        }
+
+oknoAplikacji.display();
+}
+
+
+
+void Gra::koniecGry(RenderWindow &oknoAplikacji, int &przejscie)
+{
+    if(sprawdzenieWygranej() == -10 )
+    {
+        przejscie = 2;
+        wygranaCzlowieka = 1;
+        wygranaKomputera = 0;
+    }
+
+    if(sprawdzenieWygranej() == 10  )
+    {
+        przejscie = 2;
+        wygranaKomputera = 1;
+        wygranaCzlowieka = 0;
+ 
+    }
+
     if(remis())
-        cout<<"remis!!"<<endl;
-
+    {
+        przejscie = 2;
         
-    
+    }
 
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-    oknoAplikacji.display();
 
 }

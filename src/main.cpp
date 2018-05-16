@@ -30,13 +30,32 @@ using namespace sf;
         x.przejscieDoGry(oknoAplikacji, przejscie);
         
         }
-        else
+        else if(przejscie == 1)
         {
         gra.opoznienie(clock);
         gra.wylaczanieGry(oknoAplikacji);
         gra.plansza(oknoAplikacji, x.getPole(),x.getBicie()  );
+        gra.koniecGry(oknoAplikacji, przejscie);
         
         }
+        else if (przejscie == 2)
+        {
+            x.opoznienie(clock);
+            x.wylaczanieGry(oknoAplikacji);
+            x.stronaKoncowa(oknoAplikacji, gra.getWygranaCzlowieka(), gra.getWygranaKomputera() );
+            if(x.rewanz(oknoAplikacji))
+            {   
+                gra.zerowanieWszystkiego();
+                x.zerwowanieWszystkiego();
+                przejscie = 0;
+            }
+            if(x.wyjscieZGry(oknoAplikacji))
+            {
+                break;
+            }
+            
+        }
+
 
  
  

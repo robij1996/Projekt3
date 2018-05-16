@@ -9,6 +9,16 @@ using namespace sf;
 
 
 
+void Plansza::zerwowanieWszystkiego()
+{
+     wielkoscPola = 0;  
+     danaDoPola = 0;   
+     iloscBic = 0;     
+     danaDoBic = 0;    
+     wcisniecieMyszki = 0;
+
+}
+
 int Plansza::getPole()
 {
   return wielkoscPola;
@@ -149,7 +159,7 @@ void Plansza::przejscieDoGry(RenderWindow &oknoAplikacji, int &przejscie)
      if(myszka.getPosition(oknoAplikacji).x < 400 && myszka.getPosition(oknoAplikacji).x > 200 && myszka.getPosition(oknoAplikacji).y < 200 && myszka.getPosition(oknoAplikacji).y > 100)
         if(myszka.isButtonPressed(myszka.Left))
         {
-         przejscie++;
+         przejscie = 1;
         }
 
 
@@ -199,5 +209,99 @@ void Plansza::stronaStartowa(RenderWindow &oknoAplikacji)
 
 }
 
+void Plansza::stronaKoncowa(RenderWindow &oknoAplikacji, int czlowiek, int komputer)
+{
+
+  oknoAplikacji.clear( Color::White );
+  Font font;
+  font.loadFromFile( "arial.ttf" );
+  RectangleShape szerokoscPola;
+
+  if(komputer == 1 || czlowiek == 1)
+  {
+    Text tekst1( "Winner:", font, 100 );
+    tekst1.setPosition( 100, 100 );
+    tekst1.setColor( sf::Color::Black );
+    oknoAplikacji.draw(tekst1);
+
+    if(komputer == 1)
+    {
+      Text tekst2( "Komputer", font, 100 );
+      tekst2.setPosition( 100, 200 );
+      tekst2.setColor( sf::Color::Blue );
+      oknoAplikacji.draw(tekst2);
+    }
+
+    if(czlowiek == 1)
+    {
+      Text tekst2( "Czlowiek", font, 100 );
+      tekst2.setPosition( 100, 200 );
+      tekst2.setColor( sf::Color::Blue );
+      oknoAplikacji.draw(tekst2);
+    }
+  }
+
+  if(komputer == 0 && czlowiek == 0)
+  {
+      Text tekst2( "Remis", font, 100 );
+      tekst2.setPosition( 100, 200 );
+      tekst2.setColor( sf::Color::Blue );
+      oknoAplikacji.draw(tekst2);
+
+  }
+
+    Text tekst3( "Rewanz", font, 20 );
+    tekst3.setPosition( 100, 350 );
+    tekst3.setColor( sf::Color::Blue );
+    oknoAplikacji.draw(tekst3);
+
+    Text tekst4( "Wyjscie z gry", font, 20 );
+    tekst4.setPosition( 400, 350 );
+    tekst4.setColor( sf::Color::Blue );
+    oknoAplikacji.draw(tekst4);
+
+
+  szerokoscPola.setSize(sf::Vector2f(100, 50));
+  szerokoscPola.setOutlineColor(sf::Color::Black);
+  szerokoscPola.setOutlineThickness(5);
+  szerokoscPola.setPosition(100, 400);
+  oknoAplikacji.draw(szerokoscPola);
+
+  szerokoscPola.setPosition(400, 400);
+  oknoAplikacji.draw(szerokoscPola);
+
+
+
+  oknoAplikacji.display();
+
+}
+
+
+bool Plansza::rewanz(RenderWindow &oknoAplikacji)
+{
+  Mouse myszka;
+
+  if(myszka.getPosition(oknoAplikacji).x < 200 && myszka.getPosition(oknoAplikacji).x > 100 && myszka.getPosition(oknoAplikacji).y < 450 && myszka.getPosition(oknoAplikacji).y > 400)
+  {
+    if(myszka.isButtonPressed(myszka.Left))
+      return true;
+  }
+  return false;
+}
+
+bool Plansza::wyjscieZGry(RenderWindow &oknoAplikacji)
+{
+  Mouse myszka;
+
+  
+  if(myszka.getPosition(oknoAplikacji).x < 500 && myszka.getPosition(oknoAplikacji).x > 400 && myszka.getPosition(oknoAplikacji).y < 450 && myszka.getPosition(oknoAplikacji).y > 400)
+    {
+      if(myszka.isButtonPressed(myszka.Left))
+      return true;
+    }
+    return false;
+  
+
+}
 
 

@@ -21,12 +21,15 @@ class Gra
      int ruchUzytkownika = 1;
      int ruchKomputera = 0 ;
      int iloscRuchow = 0;
+     int wygranaCzlowieka = 0;
+     int wygranaKomputera = 0;
       
 
 
      public:
 
      Gra();
+     void zerowanieWszystkiego();
      void wylaczanieGry(RenderWindow &);
      void opoznienie(Clock);
      void plansza(RenderWindow &, int, int);
@@ -35,8 +38,15 @@ class Gra
      void wstawianieZnakowPrzezCzlowieka(RenderWindow &);
      void wstawianieZnakowPrzezKomputer(RenderWindow &);
      int sprawdzenieWygranej();
-     bool zabezpiecznie (int i, int k);
      bool remis();
+     void znajdzNajlepszyRuch(int [15][15],int &, int &);
+     int miniMax(int [15][15], int , bool , int , int );
+     int maxx(int a,int b);
+     int minx(int , int );
+     void koniecGry(RenderWindow &, int &);
+     int getWygranaCzlowieka();
+     int getWygranaKomputera();
+     
     
    
 
@@ -44,3 +54,5 @@ class Gra
  };
 
  #endif
+
+

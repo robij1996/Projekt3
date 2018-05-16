@@ -20,6 +20,7 @@ class Plansza
     
     public:
     void konstruktorFont();
+    void zerwowanieWszystkiego();
     void opoznienie(Clock);
     void wylaczanieGry(RenderWindow&);
     void stronaStartowa(RenderWindow&);
@@ -29,6 +30,9 @@ class Plansza
     void przejscieDoGry(RenderWindow &, int &);
     int getPole();
     int getBicie();
+    void stronaKoncowa(RenderWindow &, int, int);
+    bool rewanz(RenderWindow &);
+    bool wyjscieZGry(RenderWindow &);
 
 
     
