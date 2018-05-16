@@ -7,10 +7,6 @@
 using namespace std;
 using namespace sf;
 
-static unsigned int DLUGOSC = 600;
-static unsigned int SZEROKOSC = 600;
-
-
 
 class Plansza
  {
@@ -31,6 +27,8 @@ class Plansza
     void wygladPolaStartowego(RenderWindow &);
     void daneBic(RenderWindow &);
     void przejscieDoGry(RenderWindow &, int &);
+    int getPole();
+    int getBicie();
 
 
     

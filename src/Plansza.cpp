@@ -7,11 +7,23 @@
 using namespace std;
 using namespace sf;
 
+
+
+int Plansza::getPole()
+{
+  return wielkoscPola;
+}
+
+int Plansza::getBicie()
+{
+  return iloscBic;
+}
+
 void Plansza::opoznienie(Clock zegar)
 {
   const float timeStep = 1 / 60.f;
   while(zegar.getElapsedTime().asSeconds() < timeStep)
-	sleep(milliseconds(20));
+	sleep(milliseconds(50));
   zegar.restart();
     
 }
